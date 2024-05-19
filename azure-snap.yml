@@ -1,0 +1,31 @@
+---
+- name: Get snapshots
+  hosts: localhost
+  gather_facts: false
+  vars:
+    azure:
+      service_principal_secret: '{{ lookup("env", "SERVICE_PRINCIPAL_SECRET") }}'
+      service_principal_id: '{{ lookup("env", "SERVICE_PRINCIPAL_ID") }}'
+    headers: Snapshot Name,Location Name,Creation Time,Disk Size GB,SKU Name,Owner Contact
+  tasks:
+    - name: Get snapshots
+      register: r_snapshot_info
+      azure.azcollection.azure_rm_resource_info:
+#        resource_group: xx
+        provider: compute
+        resource_type: snapshots
+
+#    - name: Query all the resources in the resource group
+#      azure.azcollection.azure_rm_resource_info:
+#        resource_group: xx
+#        resource_type: resources
+#      register: all_resources
+  
+    - name: Debug snapshot info
+#      loop: "{{ r_snapshot_info.response | past_retention(scan_offset_days) }}"
+#      loop_control:
+#        loop_var: snapshot
+#        label: "{{ snapshot.name }}"
+      ansible.builtin.debug:
+#        var: all_resources
+        var: r_snapshot_info
