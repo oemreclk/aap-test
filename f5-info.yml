@@ -9,6 +9,7 @@
       password: secret
       validate_certs: no
       server_port: 443 # default 443
+      no_f5_teem: false
     f5_member_port: 80
     f5_pool: my-pool
     f5_partition: Common
