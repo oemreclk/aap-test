@@ -10,6 +10,15 @@
         username: your_username
         password: your_password
       delegate_to: localhost
+      #Stop application
+    - name: Return motd to registered var
+      ansible.builtin.command: /bin/shutdown.sh
+    - name: Check running processes
+      shell: ps -ef | grep -i java
+      register: ps_cmd
+    - name: Show captured processes
+      debug:
+        var: ps_cmd.stdout
     - name: Copy file with owner and permissions
       ansible.builtin.copy:
         src: /srv/myfiles/foo.conf
@@ -24,4 +33,14 @@
     - name: Debug
       ansible.builtin.debug:
         var: stat
-        
+    #Start Service
+    - name: Return motd to registered var
+      ansible.builtin.command: /bin/startup.sh
+    - name: Check running processes
+      shell: ps -ef | grep -i java
+      register: ps_cmd_start
+    - name: Show captured processes
+      debug:
+        var: ps_cmd_start.stdout
+#/bin/shutdown.sh -> servis stop
+#/bin/startup.sh -> servis start
