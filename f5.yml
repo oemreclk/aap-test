@@ -1,6 +1,6 @@
 ---
 - name: Application Deployment with f5 operations.
-  hosts: all
+  hosts: localhost
   gather_facts: true
   vars:
     provider:
