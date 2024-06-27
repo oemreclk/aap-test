@@ -1,0 +1,24 @@
+---
+- name: F5 info
+  hosts: all
+  gather_facts: true
+  vars:
+    provider:
+      server: lb.mydomain.com
+      user: admin
+      password: secret
+      validate_certs: no
+#        server_port: 443 # default 443
+    f5_member_port: 80
+    f5_pool: my-pool
+    f5_partition: Common
+    f5_pool_member_host: 10.0.0.1
+    application_service: tomcat
+    url: http://www.example.com
+  tasks:
+    - name: Collect all BIG-IP information
+      bigip_device_info:
+        gather_subset:
+        - all
+        provider: "{{ provider }}"
+      delegate_to: localhost
