@@ -1,0 +1,20 @@
+---
+- name: Deployment POC
+  hosts: localhost
+  gather_facts: true
+  tasks:
+    - name: Download ROOT.war
+      ansible.builtin.get_url:
+        url: http://example.com/path/ROOT.war
+        dest: /path/to/save/ROOT.war
+        username: your_username
+        password: your_password
+      delegate_to: localhost
+    - name: Get stats of a file
+      ansible.builtin.stat:
+        path: /path/to/save/ROOT.war
+      register: stat
+    - name: Debug
+      ansible.builtin.debug:
+        var: stat
+        
