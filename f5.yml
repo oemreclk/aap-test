@@ -1,0 +1,75 @@
+---
+- name: Application Deployment with f5 operations.
+  hosts: all
+  gather_facts: true
+  vars:
+    provider:
+      server: lb.mydomain.com
+      user: admin
+      password: secret
+      validate_certs: no
+#        server_port: 443 # default 443
+    f5_member_port: 80
+    f5_pool: my-pool
+    f5_partition: Common
+    application_service: tomcat
+    url: http://www.example.com
+  tasks:
+    - name: Force pool member offline
+      bigip_pool_member:
+        state: forced_offline
+#       state: disabled
+        pool: "{{ f5_pool }}" #required
+        partition: "{{ f5_partition }}"
+        name: my-member
+        host: "{{ ansible_default_ipv4['address'] }}"
+        port: "{{ f5_member_port }}"
+        provider: "{{ provider }}"
+      delegate_to: localhost
+
+    - name: Stop apache tomcat service
+      ansible.builtin.service:
+        name: "{{ application_service }}"
+        state: stopped
+
+    
+#    - name: Deployment of new version of application
+
+
+    - name: Copy file with owner and permissions
+      ansible.builtin.copy:
+        src: files/deployment.txt
+        dest: /tmp/deployment.txt
+        owner: tomcat
+        group: tomcat
+        mode: '0644'
+
+    - name: Start apache tomcat service
+      ansible.builtin.service:
+        name: "{{ application_service }}"
+        state: started
+
+    - name: Check that you can connect (GET) to a page and it returns a status 200
+      ansible.builtin.uri:
+        url: "{{ url }}"
+        return_content: yes
+      register: http_response
+
+    - name: Debug if response code is 200
+      ansible.builtin.debug:
+        msg: "Response code is {{ http_response.status }}"
+      when: http_response.status == 200
+
+    - name: pool member online
+      bigip_pool_member:
+        state: enabled
+#       state: disabled
+        pool: "{{ f5_pool }}" #required
+        partition: "{{ f5_partition }}"
+        name: my-member
+        host: "{{ ansible_default_ipv4['address'] }}"
+        port: "{{ f5_member_port }}"
+        provider: "{{ provider }}"
+      delegate_to: localhost
+      when: http_response.status == 200
+
