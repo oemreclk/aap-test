@@ -1,6 +1,6 @@
 ---
 - name: F5 info
-  hosts: all
+  hosts: localhost
   gather_facts: true
   vars:
     provider:
