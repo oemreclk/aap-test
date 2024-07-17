@@ -16,7 +16,7 @@
       lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^AllowGroups'
-        line: "{{ (match_AllowGroups.stdout_lines[0] if match_AllowGroups.stdout_lines else 'AllowGroups') + ' {{ group_name }}' }}"
+        line: "{{ (match_AllowGroups.stdout_lines[0] if match_AllowGroups.stdout_lines else 'AllowGroups') + {{ group_name }} }}"
         backrefs: yes
       when: "group_name not in match_AllowGroups.stdout_lines[0]"
 
