@@ -3,9 +3,16 @@
   hosts: 192.168.22.120
   become: true
   tasks:
+
+    - name: Get current AllowGroups line
+      command: grep '^AllowGroups' /etc/ssh/sshd_config
+      register: match_AllowGroups
+      changed_when: false
+      ignore_errors: true
+  
     - name: Add group3 to AllowGroups line
       lineinfile:
         path: /etc/ssh/sshd_config
         regexp: '^AllowGroups'
-        line: '\0 group3'
+        line: "{{ (match_AllowGroups.stdout_lines[0] if match_AllowGroups.stdout_lines else 'AllowGroups') + ' group3' }}"
         backrefs: yes
