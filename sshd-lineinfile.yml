@@ -1,6 +1,7 @@
 ---
 - name: Append group4 to Addgroups line in sshd_config
   hosts: 192.168.22.120
+  become: true
   tasks:
     - name: Add group3 to AllowGroups line
       lineinfile:
