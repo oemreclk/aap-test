@@ -16,4 +16,4 @@
         regexp: '^AllowGroups'
         line: "{{ (match_AllowGroups.stdout_lines[0] if match_AllowGroups.stdout_lines else 'AllowGroups') + ' group3' }}"
         backrefs: yes
-      when: 'group3' not in match_AllowGroups.stdout_lines[0]
+      when: "'group3' not in match_AllowGroups.stdout_lines[0]"
