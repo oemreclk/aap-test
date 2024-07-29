@@ -78,6 +78,7 @@
         validate_certs: no
         body_format: json
         status_code: 200
+      delegate_to: localhost
       register: result
       until: result.status == 200
       retries: 1
