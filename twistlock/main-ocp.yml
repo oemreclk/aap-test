@@ -3,7 +3,7 @@
 ##########     Prereqs -> ansible-galaxy collection install community.kubernetes   ##############
 ---
 - name: Configure OpenShift and Twistlock settings
-  hosts: "AAP - Hybrid Node - Spot"
+  hosts: 'AAP - Hybrid Node - Spot'
   gather_facts: false
   vars:
     twistlock:
