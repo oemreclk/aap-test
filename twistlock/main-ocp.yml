@@ -56,7 +56,7 @@
         url: https://{{ twistlock_console }}/api/{{ apiversion }}/defenders/daemonset.yaml
         method: POST
         body: {
-                "consoleAddr": "{{ twistlock_defender }}:443",
+                "consoleAddr": "{{ twistlock_defender }}",
                 "cluster": "{{ cluster_name }}",
                 "namespace": "{{ namespace }}",
                 "orchestration": "openshift",
