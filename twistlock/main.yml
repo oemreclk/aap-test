@@ -1,1 +1,105 @@
+##########     Maintener -> Altuğ Yıldırım              ####################
+##########     PCC Defender Deployment Automation       ####################
+##########     Prereqs -> ansible-galaxy collection install community.kubernetes   ##############
 ---
+- name: Configure OpenShift and Twistlock settings
+  hosts: bastion-server
+  gather_facts: false
+  vars:
+    twistlock:
+      username: "{{ lookup('ansible.builtin.env', 'TWISTLOCK_USERNAME') }}"
+      password: "{{ lookup('ansible.builtin.env', 'TWISTLOCK_PASSWORD') }}"
+    oc_username: "twistlock" #sabit mi, sorulmalı
+    oc_password: "twistlock" #sabit mi, sorulmalı
+    twistlock_console: "twistlock.apps.quasysdev.quasys.com.tr" #sabit
+    twistlock_defender: "defender.apps.quasysdev.quasys.com.tr" #sabit
+    apiversion: "v1" #sabit
+    namespace: "twistlock"  # sabit
+    defender_version: "32"  # Define your defender version
+    repo: jfrog.xyz/defender
+
+  tasks:
+#    - name: Read oc_server from file and set as list
+#      set_fact:
+#        oc_servers: "{{ lookup('file', 'oc_server.txt').splitlines() }}"
+
+#    - name: Loop through each oc_server
+#      debug:
+#        msg: "Processing oc_server: {{ item }}"
+#      with_items: "{{ oc_servers }}"
+
+#    - name: Set facts for each oc_server
+#      set_fact:
+#        current_oc_server: "{{ item }}"
+#        cluster_name: "{{ item.split('.')[1] }}"
+#      with_items: "{{ oc_servers }}"
+#      register: server_facts
+
+#    - name: Debug all server facts
+#      debug:
+#        var: server_facts.results
+
+    - name: Login to OpenShift
+      community.kubernetes.k8s_auth:
+        host: "{{ oc_server }}"
+        username: "{{ oc_username }}"
+        password: "{{ oc_password }}"
+        verify_ssl: no
+      register: login_info
+
+    - name: Debug login output
+      debug:
+        var: login_info
+
+    - name: Defenders - Deploy - DaemonSet - Get Defender yaml
+      uri:
+        url: https://{{ twistlock_console }}/api/{{ apiversion }}/defenders/daemonset.yaml
+        method: POST
+        body: {
+                "consoleAddr": "{{ twistlock_defender }}:443",
+                "cluster": "{{ cluster_name }}",
+                "namespace": "{{ namespace }}",
+                "orchestration": "openshift",
+                "containerRuntime": "crio",
+                "privileged": false,
+                "serviceaccounts": true,
+                "istio": false,
+                "collectPodLabels": true,
+                "memoryLimit": 2000,
+                "cpuLimit": 1500,
+                #"image": "{{ repo }}:{{ defender_version }}",
+                "selinux": true
+                }
+        user: "{{ twistlock.username }}"
+        password: "{{ twistlock.password }}"
+        dest: defender-ds.yaml
+        mode: 0755
+        force_basic_auth: yes
+        validate_certs: no
+        body_format: json
+        status_code: 200
+      register: result
+      until: result.status == 200
+      retries: 1
+      delay: 10
+
+    # - name: Install Defender daemonset YAML
+    #   command: oc apply -f defender-ds.yaml
+    #   register: result
+
+    - name: Create a k8s namespace
+      community.kubernetes.k8s:
+        name: twistlock
+        api_version: v1
+        kind: Namespace
+        state: present
+
+    - name: Install Defender daemonset YAML
+      community.kubernetes.k8s:
+        state: present
+        src: defender-ds.yaml
+      register: result
+
+    - name: Display deployment result
+      debug:
+        msg: "Defender DaemonSet deployment result: {{ result }}"
