@@ -11,8 +11,8 @@
       password: "{{ lookup('ansible.builtin.env', 'TWISTLOCK_PASSWORD') }}"
 #    oc_username: "twistlock" #sabit mi, sorulmalı
 #    oc_password: "twistlock" #sabit mi, sorulmalı
-    twistlock_console: "twistlock.apps.quasysdev.quasys.com.tr" #sabit
-    twistlock_defender: "defender.apps.quasysdev.quasys.com.tr" #sabit
+    twistlock_console: "twistlock.apps.quasysdev02.quasys.com.tr" #sabit
+    twistlock_defender: "defender.apps.quasysdev02.quasys.com.tr" #sabit
     apiversion: "v1" #sabit
     namespace: "test-qua-twistlock"  # sabit
     defender_version: "32"  # Define your defender version
