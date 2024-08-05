@@ -2,8 +2,8 @@
 - name: test gmail
   hosts: localhost
   vars:
-    email_username: "'{{ lookup('ansible.builtin.env', 'EMAIL_USERNAME') }}' 
-    email_password: "'{{ lookup('ansible.builtin.env', 'EMAIL_PASSWORD') }}' 
+    email_username: "'{{ lookup('ansible.builtin.env', 'EMAIL_USERNAME') }}'"
+    email_password: "'{{ lookup('ansible.builtin.env', 'EMAIL_PASSWORD') }}'"
   tasks:
     - name: "Sending Mail"
       community.general.mail:
