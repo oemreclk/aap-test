@@ -12,9 +12,9 @@
       community.general.mail:
         host: smtp.gmail.com
         port: 587
-        secure: starttls
+        #secure: auto
         charset: utf-8
-        sender: "{{ email_username }}"
+        #sender: "{{ email_username }}"
         to: "{{ to_email }}"
         subject: "Test Mail from Ansible-Playbook"
         body: "Hi!!! . I am sending you mail by using ansible-playbook."
