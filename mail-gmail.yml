@@ -1,1 +1,14 @@
 ---
+- name: test gmail
+  hosts: localhost
+  tasks:
+    - name: "Sending Mail"
+      community.general.mail:
+        host: smtp.gmail.com
+        port: 587
+        sender: "{{ email_username }}"
+        to: "{{ to_email }}"
+        subject: "Test Mail from Ansible-Playbook"
+        body: "Hi!!! . I am sending you mail by using ansible-playbook."
+        username: "{{ email_username }}"
+        password: "{{ email_password }}"
