@@ -9,7 +9,7 @@
       community.general.mail:
         host: smtp.gmail.com
         port: 587
-        sender: "{{ email_username }}"
+        from: "{{ email_username }}"
         to: "{{ to_email }}"
         subject: "Test Mail from Ansible-Playbook"
         body: "Hi!!! . I am sending you mail by using ansible-playbook."
