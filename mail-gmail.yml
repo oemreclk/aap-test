@@ -12,8 +12,8 @@
       community.general.mail:
         host: smtp.gmail.com
         port: 587
-        #secure: auto
-        charset: utf-8
+        secure: starttls
+        #charset: utf-8
         sender: "{{ email_username }}"
         to: "{{ to_email }}"
         subject: "Test Mail from Ansible-Playbook"
