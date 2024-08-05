@@ -5,6 +5,9 @@
     email_username: "'{{ lookup('ansible.builtin.env', 'EMAIL_USERNAME') }}'"
     email_password: "'{{ lookup('ansible.builtin.env', 'EMAIL_PASSWORD') }}'"
   tasks:
+    - name: debug
+      debug:
+        var: email_password
     - name: "Sending Mail"
       community.general.mail:
         host: smtp.gmail.com
