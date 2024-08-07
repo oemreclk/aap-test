@@ -10,7 +10,7 @@
         var: email_password
     - name: "Sending Mail"
       community.general.mail:
-        host: smtp.yahoo.com
+        host: smtp.mail.yahoo.com
         port: 587
         secure: starttls
         #charset: utf-8
