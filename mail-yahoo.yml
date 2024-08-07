@@ -1,0 +1,22 @@
+---
+- name: test yahoo
+  hosts: localhost
+  vars:
+    email_username: "'{{ lookup('ansible.builtin.env', 'EMAIL_USERNAME') }}'"
+    email_password: "'{{ lookup('ansible.builtin.env', 'EMAIL_PASSWORD') }}'"
+  tasks:
+    - name: debug
+      debug:
+        var: email_password
+    - name: "Sending Mail"
+      community.general.mail:
+        host: smtp.yahoo.com
+        port: 587
+        secure: starttls
+        #charset: utf-8
+        sender: "{{ email_username }}"
+        to: "{{ to_email }}"
+        subject: "Test Mail from Ansible-Playbook"
+        body: "Hi!!! . I am sending you mail by using ansible-playbook."
+        username: "{{ email_username }}"
+        password: "{{ email_password }}"
