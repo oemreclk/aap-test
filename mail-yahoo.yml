@@ -11,8 +11,8 @@
     - name: "Sending Mail"
       community.general.mail:
         host: smtp.mail.yahoo.com
-        port: 465
-        secure: starttls
+        port: 587
+        #secure: starttls
         #charset: utf-8
         sender: "{{ email_username }}"
         to: "{{ to_email }}"
