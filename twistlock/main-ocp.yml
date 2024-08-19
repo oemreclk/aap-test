@@ -6,6 +6,13 @@
   hosts: AAP-HybridNode
   gather_facts: false
   vars:
+    openshift_clusters:
+      ocp_cluster1:
+        api_endpoint: api.cluster1
+        sa_token: KLASDJLASDALKSDJ
+      ocp_cluster2:
+        api_endpoint: api.cluster2
+        sa_token: ALKSJDLKASJD
     twistlock:
       username: "{{ lookup('ansible.builtin.env', 'TWISTLOCK_USERNAME') }}"
       password: "{{ lookup('ansible.builtin.env', 'TWISTLOCK_PASSWORD') }}"
@@ -28,6 +35,17 @@
 #        msg: "Processing oc_server: {{ item }}"
 #      with_items: "{{ oc_servers }}"
 
+#Debug survey var
+
+    - name: Debug survey variable
+      ansible.builtin.debug:
+        var: openshift_clusters.item
+      loop: "{{ survey_clusters }}"
+
+    - name: fail
+      ansible.builtin.fail:
+        msg: fail for test
+      
     - name: Set facts for each oc_server
       set_fact:
 #        current_oc_server: "{{ item }}"
