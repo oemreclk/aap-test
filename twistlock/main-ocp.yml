@@ -39,7 +39,7 @@
 
     - name: Debug survey variable
       ansible.builtin.debug:
-        var: openshift_clusters.item
+        var: openshift_clusters[item]
       loop: "{{ survey_clusters }}"
 
     - name: fail
