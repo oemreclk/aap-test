@@ -44,7 +44,7 @@
     state: present
     src: defender-ds.yaml
     api_key: "{{ openshift_clusters[item].sa_token }}"
-    host: "{{ survey_clusters[item].api_endpoint }}"
+    host: "{{ openshift_clusters[item].api_endpoint }}"
   register: result
   delegate_to: localhost
 
