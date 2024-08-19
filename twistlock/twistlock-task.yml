@@ -45,6 +45,7 @@
     src: defender-ds.yaml
     api_key: "{{ openshift_clusters[item].sa_token }}"
     host: "{{ openshift_clusters[item].api_endpoint }}"
+    validate_certs: false
   register: result
   delegate_to: localhost
 
