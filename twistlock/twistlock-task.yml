@@ -2,7 +2,7 @@
 - name: Set facts for each oc_server
   set_fact:
 #        current_oc_server: "{{ item }}"
-    cluster_name: "{{ survey_clusters[item].api_endpoint.split('.')[1] }}"
+    cluster_name: "{{ openshift_clusters[item].api_endpoint.split('.')[1] }}"
 #      with_items: "{{ oc_servers }}"
 #      register: server_facts
 
